@@ -55,3 +55,12 @@
 
   - debug: msg="New Kernel Version is {{ new_ker.stdout }} and old kernel version was {{ curr_kernel.stdout }}"
 
+  - name: check if all the systems responding to ssh
+    local_action:
+     module: wait_for
+      host={{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}
+      port=22
+      search_regex=OpenSSH
+      delay=15
+      timeout=300
+      state=started
